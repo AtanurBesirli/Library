@@ -1,0 +1,113 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+
+    <!-- Header -->
+    <div class="relative px-4 py-8 overflow-hidden bg-gray-800 flex-0 sm:p-16 dark">
+        <div class="relative z-10 flex flex-col items-center">
+            <h2 class="text-4xl font-extrabold">KİTAP LİSTESİ</h2>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto p-6 sm:p-10">
+
+        <div class="flex flex-col flex-auto w-full max-w-xs mx-auto sm:max-w-5xl">
+            <!-- Filters -->
+            <div class="flex flex-col items-center justify-between w-full max-w-xs sm:flex-row sm:max-w-none">
+                <mat-form-field class="w-full mt-4 sm:w-full sm:mt-0 mr-4" [subscriptSizing]="'dynamic'">
+                    <mat-icon matPrefix class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                    <input (input)="filterByQuery(query.value)" placeholder="Kitap Listesi Ara" matInput #query>
+                </mat-form-field>
+
+                <!-- <button mat-flat-button
+                    style="background-color: rgb(58, 121, 204); color:aliceblue; border-radius:7px !important"
+                    (click)="filterClear()">
+                    <span>Temizle</span>
+                </button> -->
+            </div>
+            <!-- Books -->
+            <ng-container *ngIf="this.filteredBook.length; else noBook">
+                <div class="grid grid-cols-1 gap-8 mt-8 sm:grid-cols-2 lg:grid-cols-3 sm:mt-10">
+                    <ng-container *ngFor="let book of filteredBook; trackBy: trackByFn">
+                        <!-- Book -->
+                        <div class="flex flex-col overflow-hidden shadow h-120 rounded-2xl bg-card">
+                            <div class="flex flex-col p-6">
+                                <div class="flex items-center justify-between">
+                                    <ng-container>
+                                        <div class="py-0.5 px-3 rounded-full text-sm font-semibold"
+                                            [ngClass]="'text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500'">
+                                            {{book.kayitNo}}
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <!-- Course title & description -->
+                                <div class="mt-4 text-lg font-medium"> {{book?.kitapAdi}}</div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary">{{book?.yazarAdi}}</div>
+                                <div class="w-12 h-1 my-6 border-t-2"></div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary"><span style="font-weight: bold;">Yayın
+                                        Evi: </span>{{book?.yayinevi}}</div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary"><span style="font-weight: bold;">Basım
+                                        Yılı: </span>{{book?.sayfaSayisi}}</div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary"><span style="font-weight: bold;">Sayfa
+                                        Sayısı: </span>{{book?.basimYili}}</div>
+                                <div class="mt-0.5 line-clamp-2 text-secondary"><span style="font-weight: bold;">Türü
+                                        Sayısı: </span>{{book?.tur}}</div>
+                                <div class="w-12 h-1 my-6 border-t-2"></div>
+                                <!-- Dolap -->
+                                <div class="flex items-center leading-5 text-md text-secondary">
+                                    <mat-icon class="icon-size-5 text-hint"
+                                        [svgIcon]="'heroicons_outline:bars-4'"></mat-icon>
+                                    <div class="ml-1.5"><span style="font-weight: bold;">Dolap: </span>{{book?.dolap}}
+                                    </div>
+                                </div>
+                                <!-- Raf -->
+                                <div class="flex items-center leading-5 text-md text-secondary">
+                                    <mat-icon class="icon-size-5 text-hint"
+                                        [svgIcon]="'heroicons_outline:bars-4'"></mat-icon>
+                                    <div class="ml-1.5"><span style="font-weight: bold;">Raf: </span>{{book?.raf}}</div>
+                                </div>
+                                <!-- Sıra -->
+                                <div class="flex items-center leading-5 text-md text-secondary mt-2">
+                                    <mat-icon class="icon-size-5 text-hint"
+                                        [svgIcon]="'heroicons_outline:bars-4'"></mat-icon>
+                                    <div class="ml-1.5"><span style="font-weight: bold;">Sıra: </span>{{book?.sira}}</div>
+                                </div>
+                                <!-- Durum -->
+                                <div class="flex items-center leading-5 text-md text-secondary mt-2">
+                                    <mat-icon class="icon-size-5 text-hint"
+                                        [svgIcon]="'heroicons_outline:information-circle'"></mat-icon>
+                                    <div class="ml-1.5"><span style="font-weight: bold;">Durum: </span>{{book?.aktif ? "Aktif" : "Pasif"}}</div>
+                                </div>
+                            </div>
+                            <!-- Footer -->
+                            <div class="flex flex-col w-full mt-auto">
+                                <!-- Course launch button -->
+                                <div class="px-6 py-2 text-right bg-gray-50 dark:bg-transparent">
+                                    <a mat-stroked-button (click)="reservation(book)">
+                                        <span class="inline-flex items-center pt-2 mb-2">
+                                            <!-- Started -->
+                                            <ng-container>
+                                                <span>Rezerve Et</span>
+                                            </ng-container>
+
+                                            <mat-icon class="ml-1.5 icon-size-5"
+                                                [svgIcon]="'heroicons_solid:arrow-small-right'"></mat-icon>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+
+            <!-- No Book -->
+            <ng-template #noBook>
+                <div class="flex flex-col items-center justify-center flex-auto bg-gray-100 dark:bg-transparent">
+                    <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:document-search'"></mat-icon>
+                    <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">Kitap Bulunamadı!
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
